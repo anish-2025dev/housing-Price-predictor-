@@ -1,222 +1,188 @@
-
 ````markdown
 # 🏡 Housing Price Predictor
 
-A complete machine learning pipeline to predict house prices using various housing features. This project walks through data preprocessing, feature engineering, model training using Random Forest, and saving the trained model and scaler for future predictions.
+A machine learning project to predict housing prices using a variety of regression models. This notebook performs data cleaning, feature engineering, model training, comparison across multiple regressors, and saves the best performing model for future use.
 
 ---
 
-## 📚 Table of Contents
+## 📂 Table of Contents
 
-- [📌 Project Overview](#-project-overview)  
-- [📂 Dataset](#-dataset)  
-- [⚙️ Prerequisites](#️-prerequisites)  
-- [📓 Notebook Structure](#-notebook-structure)  
-- [✅ Key Steps](#-key-steps)  
-- [🧠 Model](#-model)  
-- [🚀 Usage](#-usage)  
-- [📁 Files](#-files)  
+- [📌 Project Overview](#-project-overview)
+- [📊 Dataset](#-dataset)
+- [⚙️ Prerequisites](#️-prerequisites)
+- [📓 Notebook Structure](#-notebook-structure)
+- [✅ Key Steps](#-key-steps)
+- [🧠 Models Used](#-models-used)
+- [🚀 Usage](#-usage)
+- [📁 Files](#-files)
 - [📫 Contributing & Contact](#-contributing--contact)
 
 ---
 
 ## 📌 Project Overview
 
-This project builds a machine learning model to predict house prices based on a variety of property characteristics. It demonstrates the full ML pipeline from raw data to a saved model and scaler, ideal for those learning about data preprocessing, model training, and deployment readiness.
+The goal is to build a robust housing price prediction system based on various attributes of homes. The pipeline covers:
+
+- Exploratory data analysis
+- Handling missing values
+- Encoding categorical variables
+- Feature selection via model-based importance
+- Training multiple regression models
+- Evaluating models using MAPE
+- Saving the best model and preprocessing pipeline
 
 ---
 
-## 📂 Dataset
+## 📊 Dataset
 
-The dataset used is **HousePrices.csv**, containing detailed attributes of residential homes in Ames, Iowa.
+**Filename**: `HousePrices.csv`  
+**Target Variable**: `Property_Sale_Price`  
+Includes various features like:
 
-### 🏘️ Key Features:
-
-- `Id`: Unique identifier for each house
 - `Dwell_Type`: Type of dwelling
-- `Zone_Class`: Zoning classification
-- `LotFrontage`: Linear feet of street connected
-- `LotArea`: Lot size in square feet
-- `Road_Type`, `Alley`, `Property_Shape`, `LandContour`, `Utilities`, `Neighborhood`, and more...
-- `Property_Sale_Price`: **Target variable** representing the sale price of the property
+- `LotArea`: Lot size
+- `Neighborhood`: Area classification
+- `GarageType`, `PoolQC`, `Fence`, etc.
+- Year, condition, and quality attributes
 
 ---
 
 ## ⚙️ Prerequisites
 
-Install all required libraries using pip:
+Ensure the following Python packages are installed:
 
 ```bash
-pip install pandas seaborn numpy scikit-learn matplotlib joblib
+pip install pandas numpy matplotlib seaborn scikit-learn joblib
 ````
 
 ---
 
 ## 📓 Notebook Structure
 
-The Jupyter Notebook `housingpricepredictor.ipynb` is structured into the following sections:
+The notebook (`housingpricepredictor_cleaned.ipynb`) is organized as follows:
 
-### 1. 📥 Importing Libraries
+### 1. 📥 Import Libraries
 
-All necessary libraries are imported at the beginning of the notebook.
+All essential packages are imported for data processing, visualization, and modeling.
 
-### 2. 📊 Data Loading & Initial Inspection
+### 2. 📊 Load & Inspect Data
 
-* Loads the dataset into a pandas DataFrame
-* Displays shape, sample rows (`df.head()`), data types, null values, and summary statistics
+Reads `HousePrices.csv`, checks nulls, data types, and descriptive stats.
 
-### 3. 🔧 Handling Missing Values
+### 3. 🔧 Handle Missing Values
 
-* Visualizes missing values using seaborn heatmaps
-* Columns with missing values are identified and filled using appropriate strategies:
+* Numerical columns → filled with median or 0
+* Categorical columns → domain-specific strings like `"No Basement"`, `"No Garage"`
+* Visualized with seaborn heatmaps
 
-  * **Numeric:** Filled with median or zero
-  * **Categorical:** Filled with values like `'No Garage'`, `'No Basement'`, or mode
+### 4. 🔢 Feature Encoding
 
-### 4. 🔢 Feature Engineering & Encoding
+Categorical features are label-encoded using `LabelEncoder`.
 
-* Categorical columns are encoded using `LabelEncoder` from `sklearn.preprocessing`
-* Ensures all features are numeric and suitable for model input
+### 5. 📈 Feature Importance & Attribute Selection
 
-### 5. 🧠 Model Training & Evaluation
+* A `RandomForestRegressor` is trained
+* Top N most relevant features are selected for model input
 
-* Defines features `X` and target `y`
-* Splits data into training and testing sets
-* Trains a `RandomForestRegressor`
-* Evaluates performance using **Mean Absolute Percentage Error (MAPE)**
+### 6. 🤖 Model Comparison
 
-### 6. 💾 Model & Scaler Saving
+Applies and compares multiple regression models:
 
-* Saves the trained model as `model_rfr.pkl`
-* Saves the scaler (e.g., `StandardScaler`) as `scaler.pkl`
-* Uses `joblib.dump()` for serialization
+* Linear Regression
+* Decision Tree
+* Random Forest
+* K-Nearest Neighbors
+* Gradient Boosting
+* Support Vector Regressor
+
+Evaluated using **Mean Absolute Percentage Error (MAPE)**.
+
+### 7. 🏆 Save Best Model & Pipeline
+
+* Saves best model to `best_model.pkl`
+* Saves corresponding scaler to `best_scaler.pkl`
+* Saves selected feature list and model name
 
 ---
 
 ## ✅ Key Steps
 
-✔️ **Data Cleaning**
-Handled all missing values using logical and statistical strategies for a complete dataset.
-
-✔️ **Feature Transformation**
-Categorical features were label-encoded to be compatible with scikit-learn models.
-
-✔️ **Model Selection**
-Used `RandomForestRegressor`, a reliable ensemble learning method for regression problems.
-
-✔️ **Model Evaluation**
-Evaluated model using MAPE (Mean Absolute Percentage Error) to quantify predictive accuracy.
-
-✔️ **Model Persistence**
-Both model and scaler are saved locally using joblib for easy deployment or reuse.
+✔️ **Data Cleaning** – Imputes missing values logically
+✔️ **Label Encoding** – Categorical → Numeric
+✔️ **Feature Selection** – Based on model-based importance
+✔️ **Model Evaluation** – Via MAPE metric
+✔️ **Model Persistence** – Pickles saved for reuse
 
 ---
 
-## 🧠 Model
+## 🧠 Models Used
 
-### Model Used:
+| Model                    | Notes                             |
+| ------------------------ | --------------------------------- |
+| Linear Regression        | Baseline for performance          |
+| Decision Tree Regressor  | Handles non-linearity             |
+| Random Forest Regressor  | Robust, ensemble-based            |
+| KNN Regressor            | Simple, non-parametric            |
+| Gradient Boosting        | High accuracy for structured data |
+| Support Vector Regressor | Works well with scaled features   |
 
-**Random Forest Regressor**
-`sklearn.ensemble.RandomForestRegressor`
-
-* Ensemble method combining multiple decision trees
-* Good for capturing non-linear relationships
-* Reduces overfitting through bagging
-
-### Evaluation Metric:
-
-**MAPE (Mean Absolute Percentage Error)**
-Used to evaluate prediction error as a percentage of actual values.
+**Metric**:
+📏 **MAPE (Mean Absolute Percentage Error)** – Useful for understanding percentage error from actual prices.
 
 ---
 
 ## 🚀 Usage
 
-Follow these steps to run and test the project:
+1. Clone this repo or download the files.
 
-### 1. Clone or Download the Repository
+2. Ensure these are in the same folder:
 
-Make sure `housingpricepredictor.ipynb` and `HousePrices.csv` are in the same directory.
+   * `housingpricepredictor_cleaned.ipynb`
+   * `HousePrices.csv`
 
-### 2. Install Required Libraries
-
-```bash
-pip install pandas seaborn numpy scikit-learn matplotlib joblib
-```
-
-### 3. Open the Jupyter Notebook
+3. Run the notebook:
 
 ```bash
-jupyter notebook housingpricepredictor.ipynb
+jupyter notebook housingpricepredictor_cleaned.ipynb
 ```
 
-### 4. Run All Cells
+4. The notebook will:
 
-This will:
+   * Clean & preprocess the data
+   * Train and evaluate multiple models
+   * Save:
 
-* Load and preprocess the dataset
-* Train the Random Forest model
-* Save:
-
-  * `model_rfr.pkl` — the trained model
-  * `scaler.pkl` — the scaler used to transform numerical inputs
-
-### 5. Predict with Saved Files (optional)
-
-You can load the saved model and scaler in any Python script to make predictions on new data:
-
-```python
-import joblib
-import pandas as pd
-
-# Load model and scaler
-model = joblib.load("model_rfr.pkl")
-scaler = joblib.load("scaler.pkl")
-
-# Example new data
-new_data = pd.DataFrame({...})  # Fill with feature values
-
-# Preprocess
-scaled = scaler.transform(new_data)
-predictions = model.predict(scaled)
-```
+     * `best_model.pkl`
+     * `best_scaler.pkl`
+     * `important_features.pkl`
 
 ---
 
 ## 📁 Files
 
-| File Name                     | Description                                         |
-| ----------------------------- | --------------------------------------------------- |
-| `housingpricepredictor.ipynb` | Main notebook with the complete ML pipeline         |
-| `HousePrices.csv`             | Dataset used for training                           |
-| `model_rfr.pkl`               | Saved Random Forest model                           |
-| `scaler.pkl`                  | Saved scaler object used for feature transformation |
+| File Name                             | Description                          |
+| ------------------------------------- | ------------------------------------ |
+| `housingpricepredictor_cleaned.ipynb` | Complete ML workflow notebook        |
+| `HousePrices.csv`                     | Training dataset                     |
+| `best_model.pkl`                      | Saved model with best MAPE score     |
+| `best_scaler.pkl`                     | Scaler object for numerical features |
+| `important_features.pkl`              | List of selected top attributes      |
 
 ---
 
 ## 📫 Contributing & Contact
 
-Feel free to:
-
-* 🔧 Fork this repository
-* 💡 Suggest improvements
-* 📩 Create issues or pull requests
-
-Ideal for learning and demonstrating machine learning workflows using Python and scikit-learn.
+* Want to improve the project or try new models? Fork and PR!
+* Found a bug? Create an issue.
+* Need help understanding the flow? Reach out via the Issues tab.
 
 ---
+
+🧪 Ideal for practicing end-to-end regression ML workflows, from EDA to deployment-ready model saving.
 
 ```
 
 ---
 
-✅ This version **includes everything** (notebook structure, key steps, model info, usage instructions, prediction script, and file list) in a **single, clean `README.md`** format.
-
-Let me know if you want to:
-- Add licensing (MIT, Apache, etc.)
-- Include a badge header (like Python version, stars, forks)
-- Convert this to a GitHub Pages doc
-
-I'm happy to help with that too!
+Would you like this README saved to a `.md` file as well?
 ```
-
