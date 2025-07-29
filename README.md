@@ -181,8 +181,3 @@ jupyter notebook housingpricepredictor_cleaned.ipynb
 🧪 Ideal for practicing end-to-end regression ML workflows, from EDA to deployment-ready model saving.
 
 ```
-
----
-
-Would you like this README saved to a `.md` file as well?
-```
